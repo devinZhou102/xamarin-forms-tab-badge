@@ -7,6 +7,7 @@ using Android.Views;
 using Android.Widget;
 using Xamarin.Forms.Platform.Android;
 using Android.Content;
+using Plugin.Badge.Abstractions;
 using View = Android.Views.View;
 
 namespace Plugin.Badge.Droid
@@ -87,7 +88,7 @@ namespace Plugin.Badge.Droid
                 return;
             }
 
-            var element = Element.Children[tabIndex];
+            var page = Element.GetChildPageWithBadge(tabIndex);
 
             var badgeView = view.FindChildOfType<BadgeView>();
 
@@ -101,14 +102,14 @@ namespace Plugin.Badge.Droid
                 }
 
                 //create badge for tab
-                badgeView = BadgeView.ForView(Context, badgeTarget);
+                badgeView = BadgeView.ForTarget(Context, badgeTarget);
             }
 
-            BadgeViews[element] = badgeView;
+            BadgeViews[page] = badgeView;
 
-            badgeView.UpdateFromElement(element);
+            badgeView.UpdateFromElement(page);
 
-            element.PropertyChanged += OnTabbedPagePropertyChanged;
+            page.PropertyChanged += OnTabbedPagePropertyChanged;
         }
 
         protected virtual void OnTabbedPagePropertyChanged(object sender, PropertyChangedEventArgs e)
